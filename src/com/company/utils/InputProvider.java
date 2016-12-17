@@ -1,6 +1,5 @@
 package com.company.utils;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,7 +16,7 @@ public class InputProvider {
         try {
             reader = new Scanner(new FileReader(fileName));
             int i = 0;
-            while ( reader.hasNextLine()) {
+            while (reader.hasNextLine()) {
                 array[i] = reader.nextInt();
                 i++;
             }
