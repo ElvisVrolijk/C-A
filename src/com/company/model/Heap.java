@@ -1,91 +1,56 @@
-package com.company;
+package com.company.model;
 
-/*
+/**
+ * Representation of a heap.
  *
  * HINT:
- *
  * last parent = (index - 1) / 2
  * left child = (index * 2) + 1
  * right child = (index * 2) + 2
  *
  */
-
-
-/**
- * Replacement Selection Heap
- * Created by S1mpler on 12/15/2016.
- */
-public class RSHeap {
+public class Heap {
     ///////////////////////////////////////////////////////////////////////////
     // Properties
     ///////////////////////////////////////////////////////////////////////////
-    final int H;
-    int[] array;
-
-    int[] deadSpace;
+    private int size;
+    private int[] heap; //deadspace is inside of this heap
 
     int[] inputBuffer;
     int[] outputBuffer;
 
-    /**
-     * Types of the heap.
-     * MIN  -   insures that node's children will always >= their parent.
+    /*
+     * Type of the heap.
      * MAX  -   insures that node's children will always <= their parent.
      */
-    enum Type {MIN, MAX};
 
     /**
      * Constructor
      * @param size Size of the heap
      */
-    public RSHeap(int size) {
-        this.H = size;
+    Heap(int size) {
+        this.size = size;
     }
 
     /**
-     * Contsructor
-     * @param size Size of the heap
-     * @param numbers Array of integers
+     * Setting heap for the heap.
+     * @param heap Array of integers
      */
-    public RSHeap(int size, int[] numbers) {
-        this.H = size;
-        setArray(numbers);
-    }
-
-    /**
-     * Setting array for the heap.
-     * @param array Array of integers
-     */
-    public void setArray(int[] array) {
-        if (array.length > H) {   //if amount of input array is larger then size of the heap.
-            System.out.println("Error! Amount of array must be <= " + H
-                    + "\nYou gave an array that contains " + array.length + " parameters");
-        } else {    //if the length of input array is OK
-            this.array = array;
+    public Heap setHeapArray(int[] heap) {
+        if (heap.length > size) {   //if amount of input heap is larger then size of the heap.
+            System.out.println("Error! Heap size is " + size
+                    + "\nYou gave an heap that contains " + heap.length + " parameters");
+        } else {    //if the length of input heap is OK
+            this.heap = heap;
         }
+        return this;
     }
 
     /**
-     * Building the heap tree
-     * @param type MIN heap or MAX heap type
+     * Builds a MAX heap
      */
-    public void build(Type type) {
-        switch (type) {
-            case MAX:
-                buildMax();
-                break;
-            case MIN:
-                buildMin();
-                break;
-        }
-    }
-
-    /**
-     * Helper method.
-     * Building the heap as a minHeap
-     */
-    private void buildMin() {
-        // TODO: 12/18/2016 implement
+    public void build() {
+        buildMax();
     }
 
     /**
@@ -93,9 +58,33 @@ public class RSHeap {
      * Building the heap as a maxHeap
      */
     private void buildMax() {
-        for (int i = (array.length / 2) - 1; i >= 0; i--) {
-           percolateDown(i);
+        for (int i = (size / 2) - 1; i >= 0; i--) {
+            percolateDown(i);
         }
+    }
+
+    /**
+     * Removes and returns top of the heap (max) and rebuilds the heap
+     * @return Max (top) element of the heap
+     */
+    public int popMax() {
+        int max = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        build();
+        return max;
+    }
+
+    public int getDeadspaceLength() {
+        return heap.length - size;
+    }
+
+    /**
+     * Checks if the heap empty
+     * @return True if heap is empty
+     */
+    private boolean isHeapEmpty() {
+        return size == 0;
     }
 
     /**
@@ -105,7 +94,7 @@ public class RSHeap {
      * @return The index of the largest element.
      */
     private int getTheLargest(int i1, int i2) {
-        return array[i1] >= array[i2] ? i1 : i2;
+        return heap[i1] >= heap[i2] ? i1 : i2;
     }
 
     /**
@@ -132,9 +121,9 @@ public class RSHeap {
      * @param i2 Index of the second node
      */
     private void swap(int i1, int i2) {
-        int temporary = array[i1];
-        array[i1] = array[i2];
-        array[i2] = temporary;
+        int temporary = heap[i1];
+        heap[i1] = heap[i2];
+        heap[i2] = temporary;
     }
 
     /**
@@ -145,28 +134,27 @@ public class RSHeap {
         int rightChild = getRightChild(index);
         int largestChild;
 
-        if (rightChild < array.length) {
+        if (rightChild < size) {
             //right child exists
             largestChild = getTheLargest(leftChild, rightChild);
-        } else if(leftChild < array.length) {
+        } else if(leftChild < size) {
             //if node has only one child then this child is the largest
             largestChild = leftChild;
         } else { //if this note is not a parent
             return;
         }
 
-        if (array[largestChild] > array[index]) { // if the largest is larger then parent
+        if (heap[largestChild] > heap[index]) { // if the largest is larger then parent
             swap(largestChild, index);
             percolateDown(largestChild);
         }
-
     }
 
     @Override
     public String toString() {
         String result = "";
-        for (int i = 0; i < array.length; i++) {
-            result += array[i] + ", ";
+        for (int i = 0; i < size; i++) {
+            result += heap[i] + ", ";
         }
         return result;
     }

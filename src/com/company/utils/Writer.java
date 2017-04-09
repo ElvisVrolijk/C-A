@@ -7,7 +7,7 @@ import java.io.PrintWriter;
  * Provides functions to manipulate output into the files.
  * Created by e_voe_000 on 12/8/2016.
  */
-public class FileWriter {
+public class Writer {
     ///////////////////////////////////////////////////////////////////////////
     // Properties
     ///////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ public class FileWriter {
      * Constuctor
      * @param fileName Name of the file
      */
-    public FileWriter(String fileName) {
+    public Writer(String fileName) {
         this.fileName = fileName;
     }
 
